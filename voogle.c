@@ -51,15 +51,12 @@ char * read_a_line ()
 	return s ;
 }
 
-char * checker_for_token_star (char * token) {
-	fp_niv = fopen("NIV.txt", "r") ;
-	char * output = 0x0 ;
-	char * s = 0x0 ;
+char * checker_for_token_star (char * token, char * string) {
+	if(string = 0)
 	while ((s = read_a_line())) {
 		if (strstr(s, token) != NULL) {
 			output = s;
 		}
-	fclose(fp_niv) ;
 	}
 	return output;
 }
