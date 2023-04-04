@@ -74,7 +74,7 @@ int checker_for_token (char * term, char * string) {
 				return 0;
 			}
 		}
-		else if ((strcmp(stringLower(token), stringLower(term))) != 0) {
+		if ((strcmp(stringLower(token), stringLower(term))) != 0) {
 			if(result1 == 0) {
 				return 0;
 			}
@@ -88,20 +88,24 @@ int checker_for_token_star (char * term, char * string) {
 	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
 	char * token = strtok(new_string, space);
-
+	char * replacement = strdup(term);
+	char * lowerTerm = stringLower(replacement);
 	int term_length = strlen(term);
-	int result1 = strncmp(token, term, term_length);
+	
 	while (token != NULL) {
+		int result1 = strncmp(token, term, term_length);
+		char * lowerToken = stringLower(token);
+
+		int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
+		int resultLower = strncmp(lowerToken, lowerTerm, term_length);
 		if((strcmp(token, term)) != 0) {
 			if(result1 == 0) {
 				return 0;
-				break;
 			}
 		}
-		else if ((strcmp(stringLower(token), stringLower(term))) != 0) {
-			if(result1 == 0) {
+		if (strcmp_lower_result != 0) {
+			if(resultLower == 0) {
 				return 0;
-				break;
 			}
 		}
 		token = strtok(NULL, space);
@@ -144,7 +148,7 @@ int main (int argc, char ** argv)
 	// 	}
 	// }
 	char * jude = "Jude" ;
-	char * s = "Mat 2:1 After Jesus was born in Bethlehem in Jude, during the time of King Herod, Magi from the east came to Jerusalem";
+	char * s = "Mat 2:1 After Jesus was born in Bethlehem in Jud, during the time of King Herod, Magi from the east came to Jerusalem";
 	char * new_s = remove_book_verse(s);
 	int x,y,z;
 	x = checker_for_token_star(jude,new_s);
