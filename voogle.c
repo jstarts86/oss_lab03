@@ -4,8 +4,10 @@
 #include <ctype.h>
 
 FILE * fp_niv ;
-char * stringLower(char * str); int checker_for_token (char * term, char * string);
+char * stringLower(char * str); 
+int checker_for_token (char * term, char * string);
 int checker_for_token_star (char * term, char * string);
+int checker_for_token_dash (char * term, char * string);
 char * remove_book_verse(char * str);
 char * read_a_line ()
 {
@@ -113,6 +115,28 @@ int checker_for_token_star (char * term, char * string) {
 	}
 	return 1;
 }
+int checker_for_token_dash (char * term, char * string) {
+	char * new_string = remove_book_verse(string);
+	const char space[2] = " ";
+	char * token = strtok(new_string, space);
+	char * replacement = strdup(term);
+	char * lowerTerm = stringLower(replacement);
+	int term_length = strlen(term);
+	
+	while (token != NULL) {
+		char * lowerToken = stringLower(token);
+
+		int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
+		if((strcmp(token, term)) == 0) {
+			return 1;
+		}
+		if(strcmp_lower_result == 0) {
+			return 1;
+		}
+		token = strtok(NULL, space);
+	}
+	return 0;
+}
 char * remove_book_verse(char * str) {
     int space_count = 0;
     char *ptr = str;
@@ -140,13 +164,15 @@ int main (int argc, char ** argv)
 	fp_niv = fopen("NIV.txt", "r") ;
 
 	char * jude = "Jude" ;
-	char * s = "Jude 2:1 After Jesus was born in Bethlehem in judE , during the time of King Herod, Magi from the east came to Jerusalem";
+	char * s = "Jude 2:1 After Jesus was born in Bethlehem in Jude, during the time of King Herod, Magi from the east came to Jerusalem";
 	//char * new_s = remove_book_verse(s);
 	int x,y,z;
 	// x = checker_for_token_star(jude,s);
 	// printf("Checker for * %d\n", x);
-	y = checker_for_token(jude,s);
-	printf("Checker for normal token %d\n", y);
+	// y = checker_for_token(jude,s);
+	// printf("Checker for normal token %d\n", y);
+	z = checker_for_token_dash(jude,s);
+	printf("Checker for dash token(1 if it token is in line/ 0 if it is not):%d\n", z);
 	printf("%s\n", s);
 	//free(s);
 		
