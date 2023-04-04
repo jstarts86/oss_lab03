@@ -71,11 +71,13 @@ int checker_for_token (char * term, char * string) {
 	int term_length = strlen(term);
 	
 	while (token != NULL) {
-		int result1 = strncmp(token, term, term_length);
 		char * lowerToken = stringLower(token);
 
 		int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
-		if(((strcmp(token, term)) || strcmp_lower_result) == 0) {
+		if((strcmp(token, term)) == 0) {
+			return 0;
+		}
+		if(strcmp_lower_result == 0) {
 			return 0;
 		}
 		token = strtok(NULL, space);
@@ -138,7 +140,7 @@ int main (int argc, char ** argv)
 	fp_niv = fopen("NIV.txt", "r") ;
 
 	char * jude = "Jude" ;
-	char * s = "Jude 2:1 After Jesus was born in Bethlehem in Jude , during the time of King Herod, Magi from the east came to Jerusalem";
+	char * s = "Jude 2:1 After Jesus was born in Bethlehem in judE , during the time of King Herod, Magi from the east came to Jerusalem";
 	//char * new_s = remove_book_verse(s);
 	int x,y,z;
 	// x = checker_for_token_star(jude,s);
