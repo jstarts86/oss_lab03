@@ -4,7 +4,8 @@
 #include <ctype.h>
 
 FILE * fp_niv ;
-char * stringLower(char * str); int checker_for_token (char * term, char * string);
+char * stringLower(char * str); 
+int checker_for_token (char * term, char * string);
 int checker_for_token_star (char * term, char * string);
 char * remove_book_verse(char * str);
 char * read_a_line ()
@@ -67,15 +68,17 @@ int checker_for_token (char * term, char * string) {
 	char *token = strtok(string, space);
 	string = remove_book_verse(string);
 	int term_length = strlen(term);
-	int result1 = strncmp(token, term, term_length);
+	int result, result_lower;
 	while (token != NULL) {
 		if((strcmp(token, term)) != 0) {
-			if(result1 == 0) {
+			result = strncmp(token, term, term_length);
+			if(result == 0) {
 				return 0;
 			}
 		}
 		else if ((strcmp(stringLower(token), stringLower(term))) != 0) {
-			if(result1 == 0) {
+			result_lower = strncmp(token, term, term_length);
+			if(result_lower == 0) {
 				return 0;
 			}
 		}
@@ -85,29 +88,36 @@ int checker_for_token (char * term, char * string) {
 }
 
 int checker_for_token_star (char * term, char * string) {
-	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
+	char * new_string = strdup(string);
+	new_string = remove_book_verse(new_string);
 	char * token = strtok(new_string, space);
-
 	int term_length = strlen(term);
-	int result1 = strncmp(token, term, term_length);
+	int result, result_lower;
 	while (token != NULL) {
+
 		if((strcmp(token, term)) != 0) {
-			if(result1 == 0) {
+			result = strncmp(token, term, term_length);
+			if(result == 0) {
+				free(new_string);
 				return 0;
-				break;
 			}
 		}
-		else if ((strcmp(stringLower(token), stringLower(term))) != 0) {
-			if(result1 == 0) {
+		char * low_token = stringLower(token);
+		char * low_term = stringLower(term);
+		if ((strcmp(low_token, low_term)) != 0) {
+			result_lower = strncmp(low_token, low_term, term_length);
+			if(result_lower == 0) {
+				free(new_string);
 				return 0;
-				break;
 			}
 		}
 		token = strtok(NULL, space);
 	}
+	free(new_string);
 	return 1;
 }
+
 char * remove_book_verse(char * str) {
     int space_count = 0;
     char *ptr = str;
@@ -143,8 +153,8 @@ int main (int argc, char ** argv)
 	// 		free(s) ;
 	// 	}
 	// }
-	char * jude = "Jude" ;
-	char * s = "Mat 2:1 After Jesus was born in Bethlehem in Jude, during the time of King Herod, Magi from the east came to Jerusalem";
+	char * jude = "Jude";
+	char * s = "Mat 2:1 After Jesus was born in Bethlehem in Judea, during the time of King Herod, Magi from the east came to Jerusalem";
 	char * new_s = remove_book_verse(s);
 	int x,y,z;
 	x = checker_for_token_star(jude,new_s);
