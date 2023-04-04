@@ -1,0 +1,27 @@
+read_a_line {
+    reads 1 line
+}
+
+read_input {
+    takes input()
+    stores them into a maximum of 8 variables
+
+    if " " then take the contents of the " "
+
+    if its just a space take the term and store it into a seperate string variables
+
+
+    then take check each term 
+    
+    if its token
+
+    if its token*
+
+    if its -token
+
+    if its "string"
+
+    if its book:code
+
+    if its chapter:num
+}
