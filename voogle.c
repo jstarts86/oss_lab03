@@ -51,19 +51,34 @@ char * read_a_line ()
 	return s ;
 }
 
-
-
-int main (int argc, char ** argv)
-{
+char * checker() {
 	fp_niv = fopen("NIV.txt", "r") ;
 
 	char * s = 0x0 ;
-
+	char z = 'Z';
 	while ((s = read_a_line())) {
-		printf("%s\n", s) ;
-		free(s) ;
+		if (strchr(s,z) != NULL) {
+			printf("%s\n", s) ;
+			free(s) ;
+		}
+	fclose(fp_niv) ;
 	}
+}
+int main (int argc, char ** argv)
+{
 
+	fp_niv = fopen("NIV.txt", "r") ;
 
+	char * s = 0x0 ;
+	char z = 'Z';
+	while ((s = read_a_line())) {
+		if (strchr(s,z) != NULL) {
+			printf("%s\n", s) ;
+			free(s) ;
+		}
+
+	}
 	fclose(fp_niv) ;
 }
+
+
