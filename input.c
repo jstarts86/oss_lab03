@@ -1,29 +1,39 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX_TERMS 8
-#define TERM_LENGTH 20
-
 int main() {
-    char terms[MAX_TERMS][TERM_LENGTH];
-    int num_terms = 0;
+    char inputs[8][20];
+    char * terms[20];
 
-    // prompt the user to enter up to 8 search terms
-    printf("Enter up to %d search terms (press Ctrl+D to finish):\n", MAX_TERMS);
-    char term[TERM_LENGTH];
-    while (num_terms < MAX_TERMS && fgets(term, TERM_LENGTH, stdin) != NULL) {
-        term[strcspn(term, "\n")] = '\0'; // remove trailing newline character
-        if (strlen(term) == 0) {
+    int i, j;
+    int num_terms = 0;
+    printf("Enter terms: (up to 8):\n");
+    for (i = 0; i < 8; i++) {
+        if (fgets(inputs[i], 100, stdin) == NULL) {
             break;
         }
-        strcpy(terms[num_terms], term);
-        num_terms++;
+        //inputs[i][strcspn(inputs[i], "\n")] = '\0';
     }
-
-    // print the search terms entered by the user
-    printf("You entered the following search terms:\n");
-    for (int i = 0; i < num_terms; i++) {
-        printf("%s\n", terms[i]);
+    char* token = strtok(inputs[i], " ");
+    while (token != NULL) {
+        if(token[0] == '"' && token[strlen(token) -1] == '"') {
+            terms[num_terms] = token;
+            num_terms++;
+        }
+        else {
+            char *token2 = strtok(token, " ");
+            while (token2 != NULL) {
+                terms[num_terms] = token2;
+                num_terms++;
+                terms[num_terms] = strtok(NULL, " ");
+            }
+        }
+        token = strtok(NULL, " ");
+    }
+    for (j = 0; j < num_terms; j++) {
+        printf("%s ", terms[j]);
     }
 
     return 0;

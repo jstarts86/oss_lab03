@@ -51,13 +51,13 @@ char * read_a_line ()
 	return s ;
 }
 
-char * checker() {
+char * checker_for_token() {
 	fp_niv = fopen("NIV.txt", "r") ;
 
 	char * s = 0x0 ;
-	char z = 'Z';
+	char * token = "Jude";
 	while ((s = read_a_line())) {
-		if (strchr(s,z) != NULL) {
+		if (strstr(s, jude) != NULL) {
 			printf("%s\n", s) ;
 			free(s) ;
 		}
@@ -71,12 +71,12 @@ int main (int argc, char ** argv)
 
 	char * s = 0x0 ;
 	char z = 'Z';
+	char * jude = "Jude";
 	while ((s = read_a_line())) {
-		if (strchr(s,z) != NULL) {
+		if (strstr(s, jude) != NULL) {
 			printf("%s\n", s) ;
 			free(s) ;
 		}
-
 	}
 	fclose(fp_niv) ;
 }
