@@ -145,9 +145,7 @@ int main (int argc, char ** argv)
 	char * s = 0x0 ;
 	char * token = "Jude";
 	while ((s = read_a_line())) {
-		char * b_verse = strchr(s, ' ');
-		char * verse = strchr(b_verse, ' ');
-		if (strstr(b_verse, token) != NULL) {
+		if (strstr(s, token) != NULL) {
 			char * mod_s = remove_book_verse(s);
 			printf("%s\n", mod_s) ;
 			free(mod_s) ;
