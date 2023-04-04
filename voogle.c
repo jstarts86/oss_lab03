@@ -51,34 +51,67 @@ char * read_a_line ()
 	return s ;
 }
 
-char * checker_for_token() {
+char * checker_for_token_star () {
 	fp_niv = fopen("NIV.txt", "r") ;
-
+	char * output = 0x0 ;
 	char * s = 0x0 ;
 	char * token = "Jude";
 	while ((s = read_a_line())) {
-		if (strstr(s, jude) != NULL) {
-			printf("%s\n", s) ;
-			free(s) ;
+		char * b_verse = strstr(s, " ");
+		char * verse = strstr(b_verse, " ");
+		if (strstr(b_verse, token) != NULL) {
+			output = s;
+
 		}
 	fclose(fp_niv) ;
 	}
+	return output;
+}
+
+void remove_book_verse(char * line, char * final_str) {
+    char *first_space = strchr(line, ' ');
+    char buffer_str[1000];
+
+
+    if (first_space != NULL) {
+        strcpy(buffer_str, first_space + 1);
+    }  
+    char *final_space = strchr(buffer_str, ' ');
+
+    if (final_space != NULL) {
+        strcpy(final_str, final_space + 1);
+    } 
+   
 }
 int main (int argc, char ** argv)
 {
 
 	fp_niv = fopen("NIV.txt", "r") ;
 
+	// char * s = 0x0 ;
+	// char z = 'Z';
+	// char * jude = "Jude";
+	// while ((s = read_a_line())) {
+	// 	if (strstr(s, jude) != NULL) {
+	// 		printf("%s\n", s) ;
+	// 		free(s) ;
+	// 	}
+	// }
 	char * s = 0x0 ;
-	char z = 'Z';
-	char * jude = "Jude";
+	char * token = "Jude";
+	char * mod_s = 0x0;
 	while ((s = read_a_line())) {
-		if (strstr(s, jude) != NULL) {
-			printf("%s\n", s) ;
+		char * b_verse = strchr(s, ' ');
+		char * verse = strchr(b_verse, ' ');
+		if (strstr(b_verse, token) != NULL) {
+			remove_book_verse(s,mod_s);
+			printf("%s\n", mod_s) ;
 			free(s) ;
 		}
+	
 	}
 	fclose(fp_niv) ;
+	return 0;
 }
 
 
