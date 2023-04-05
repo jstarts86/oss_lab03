@@ -15,7 +15,7 @@ int checker_for_token_dash (char * term, char * string);
 char * remove_book_verse(char * str);
 int tokenizer(char *input, char **terms);
 char* remove_last_char(const char* str);
-char* remove_first_char(const char* str);
+char* remove_first_char(char* str);
 char * read_a_line ()
 {
 	static char buf[BUFSIZ] ;
@@ -183,11 +183,11 @@ int checker_for_token_dash (char * term, char * string) {
 	char * lowerTerm = stringLower(replacement);
 	int term_length = strlen(term);
 	if(term[0] == '-') {
+		term = remove_first_char(term);
+		lowerTerm = remove_first_char(lowerTerm);
+		term_length = strlen(term);
 		while (token != NULL) {
-			term = remove_first_char(term);
-			term_length = strlen(term);
 			char * lowerToken = stringLower(token);
-			term_length = strlen(term);
 			int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
 			if((strcmp(token, term)) == 0) {
 				return 1;
@@ -235,7 +235,7 @@ char* remove_last_char(const char* str) {
     return new_str;
 }
 
-char* remove_first_char(const char* str) {
+char* remove_first_char(char* str) {
 	int len = strlen(str);
 
 	if(len == 0) {
@@ -270,8 +270,8 @@ int main (int argc, char ** argv)
 	//fp_niv = fopen("NIV.txt", "r") ;
 
 	char * jude = "-Jude" ;
-	char * s = "Jude 2:1 After Jesus was born in Bethlehem in Jude, during the time of King Herod, Magi from the east came to Jerusalem";
-	char * new_s = remove_book_verse(s);
+	char * s = "Jude 2:1 After Jesus was born in Bethlehem in juDe , during the time of King Herod, Magi from the east came to Jerusalem";
+	//char * new_s = remove_book_verse(s);
 	int x,y,z;
 	//x = checker_for_token_star(jude,s);
 	//printf("Checker for * %d\n", x);
@@ -283,8 +283,13 @@ int main (int argc, char ** argv)
 	//free(s);
 	//fclose(fp_niv) ;
 
-	
-	return 0;
+	// char str[] = "-hello world";
+    // printf("Original string: %s\n", str);
+    
+    // char *new_str = remove_first_char(str);
+    // printf("Modified string: %s\n", new_str);
+    
+    return 0;
 }
 	
 
