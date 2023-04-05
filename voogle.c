@@ -12,7 +12,7 @@ int checker_for_token (char * term, char * string);
 int checker_for_token_star (char * term, char * string);
 int checker_for_token_dash (char * term, char * string);
 char * remove_book_verse(char * str);
-char ** tokenizer(char * input);
+int tokenizer(char * input, char ** terms, int max_terms)
 char * read_a_line ()
 {
 	static char buf[BUFSIZ] ;
@@ -60,41 +60,27 @@ char * read_a_line ()
 }
 
 
-char ** tokenizer(char * string){
+int tokenizer(char * input, char ** terms, int max_terms){
 	const char quote[2] = "\"";
 	const char space[2] = " ";
-	char * token = strtok(string, space);
-	int num_inputs = 0;
-	int max_input_length = MAX_INPUT_LENGTH;
-	char ** inputs = (char **) malloc(MAX_NUM_INPUT * sizeof(char *));
-    if (inputs == NULL) {
-        fprintf(stderr, "Error: Failed to allocate memory for inputs.\n");
-        exit(EXIT_FAILURE);
-    }
 	int i = 0;
-	while (token != NULL) {
-		if(i > 8) {
-			fprintf(stderr, "Error: more than 8 tokens");
-			EXIT_FAILURE;
-		}
-		if(strcmp(token,quote) == 0) {
-			token = strtok(NULL, space);
-			char * quotedWord = (char *) malloc(max_input_length * sizeof(char));; 
-			if(quotedWord == NULL) {
-                fprintf(stderr, "Error: Failed to allocate memory for quotedWord.\n");
-                exit(EXIT_FAILURE);				
+	terms[i] = strtok(input, space);
+
+
+	int i = 0;
+	while (terms[i] != NULL && i < max_terms) {
+		if(strcmp(terms[i], quote) == 0) {
+			terms[i] = strtok(NULL, space);
+			char * quotedWord[MAX_INPUT_LENGTH];
+			quotedWord[0] = '\0';
+			while(strcmp(terms[i], quote) != 0) {
+				strcat(quotedWord, terms[i]);
+				terms[i] = strtok(NULL, space);
 			}
-			while(token != quote) {
-				strcat(quotedWord, token);
-			}
-			inputs[num_inputs][strlen(quotedWord)] = quotedWord;
-			num_inputs++;
+			strcpy(inputs[i], )
 		}
-		else{
-			inputs[num_inputs][strlen(token)] = token;
-			num_inputs++;
-		}
-		token = strtok(NULL, space);
+		i++;
+		tokens[i] = strtok(NULL, " ");
 	}
 	return inputs;
 	
