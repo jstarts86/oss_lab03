@@ -65,17 +65,22 @@ char * read_a_line ()
 
 
 int tokenizer(char *input, char **terms) {
+	// intitialzes variables
     int i = 0;
     int quotes = 0;
+	//pointer to beginning of current token
     char *token_start = input;
 
+	//removes new line character
     strtok(input, "\n");
 
+	//tokenizes when ever there is a space character
     while (*input != '\0') {
+		// checks if current character is a quotation mark
         if (*input == '\"') {
             quotes = !quotes;
         }
-
+		// if not it quotes and we have space, replace space with null terminator and add current token to array
         if (*input == ' ' && !quotes) {
             *input = '\0';
             terms[i++] = token_start;
@@ -85,7 +90,7 @@ int tokenizer(char *input, char **terms) {
         input++;
     }
 
-    // handle last token
+    // add last token if there is room
     if (i < MAX_NUM_INPUT && token_start != input) {
         terms[i++] = token_start;
     }
@@ -116,9 +121,9 @@ int checker_for_token (char * term, char * string) {
 	const char space[2] = " ";
 	char * token = strtok(new_string, space);
 	char * replacement = strdup(term);
-	char * lowerTerm = stringLower(replacement);
-	int term_length = strlen(term);
-	if(term[0] != '\"' || term[0] != '-' || term[term_length - 1] != '*') {
+	char * lowerTerm = stringLower(replacement); //makes the term all lower case
+	int term_length = strlen(term); //gets the length of the term
+	if(term[0] != '\"' || term[0] != '-' || term[term_length - 1] != '*') { // checks to see if its a regular token
 		while (token != NULL) {
 			char * lowerToken = stringLower(token);
 
