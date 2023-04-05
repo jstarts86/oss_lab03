@@ -3,12 +3,16 @@
 #include <string.h>
 #include <ctype.h>
 
+#define MAX_INPUT_LENGTH 100
+#define MAX_NUM_INPUT 8
+
 FILE * fp_niv ;
 char * stringLower(char * str); 
 int checker_for_token (char * term, char * string);
 int checker_for_token_star (char * term, char * string);
 int checker_for_token_dash (char * term, char * string);
 char * remove_book_verse(char * str);
+char ** tokenizer(char * input);
 char * read_a_line ()
 {
 	static char buf[BUFSIZ] ;
@@ -55,6 +59,48 @@ char * read_a_line ()
 	return s ;
 }
 
+
+char ** tokenizer(char * string){
+	const char quote[2] = "\"";
+	const char space[2] = " ";
+	char * token = strtok(string, space);
+	int num_inputs = 0;
+	int max_input_length = MAX_INPUT_LENGTH;
+	char ** inputs = (char **) malloc(MAX_NUM_INPUT * sizeof(char *));
+    if (inputs == NULL) {
+        fprintf(stderr, "Error: Failed to allocate memory for inputs.\n");
+        exit(EXIT_FAILURE);
+    }
+	int i = 0;
+	while (token != NULL) {
+		if(i > 8) {
+			fprintf(stderr, "Error: more than 8 tokens");
+			EXIT_FAILURE;
+		}
+		if(strcmp(token,quote) == 0) {
+			token = strtok(NULL, space);
+			char * quotedWord = (char *) malloc(max_input_length * sizeof(char));; 
+			if(quotedWord == NULL) {
+                fprintf(stderr, "Error: Failed to allocate memory for quotedWord.\n");
+                exit(EXIT_FAILURE);				
+			}
+			while(token != quote) {
+				strcat(quotedWord, token);
+			}
+			inputs[num_inputs][strlen(quotedWord)] = quotedWord;
+			num_inputs++;
+		}
+		else{
+			inputs[num_inputs][strlen(token)] = token;
+			num_inputs++;
+		}
+		token = strtok(NULL, space);
+	}
+	return inputs;
+	
+}
+
+//iterates through a string making all letters lower case using tolower
 char * stringLower(char * str) {
 
 	int len = strlen(str);
@@ -62,8 +108,10 @@ char * stringLower(char * str) {
         str[i] = tolower(str[i]);
     }
 	return str;
-} 
+}
 
+// (i.e., an alphanumeric string without whitespace): a verse satisfies 
+//this condition iff a token in the verse matches with the given token in case- insensitive way
 int checker_for_token (char * term, char * string) {
 	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
@@ -86,7 +134,10 @@ int checker_for_token (char * term, char * string) {
 	}
 	return 1;
 }
-
+/*
+	 a verse satisfies this condition iff there is a token in the
+	  verse whose prefix matches with token in case-insensitive way
+*/
 int checker_for_token_star (char * term, char * string) {
 	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
@@ -115,6 +166,10 @@ int checker_for_token_star (char * term, char * string) {
 	}
 	return 1;
 }
+/*
+	 a verse satisfies this condition iff the verse has 
+	 no token that matches with token in case-insensitive way
+*/
 int checker_for_token_dash (char * term, char * string) {
 	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
@@ -137,6 +192,7 @@ int checker_for_token_dash (char * term, char * string) {
 	}
 	return 0;
 }
+// removes the book and verse from the line
 char * remove_book_verse(char * str) {
     int space_count = 0;
     char *ptr = str;
