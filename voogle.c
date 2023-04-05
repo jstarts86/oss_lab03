@@ -16,6 +16,7 @@ char * remove_book_verse(char * str);
 int tokenizer(char *input, char **terms);
 char* remove_last_char(const char* str);
 char* remove_first_char(char* str);
+int check_line(char *str, char **terms, int num_terms);
 char * read_a_line ()
 {
 	static char buf[BUFSIZ] ;
@@ -117,20 +118,26 @@ int checker_for_token (char * term, char * string) {
 	char * replacement = strdup(term);
 	char * lowerTerm = stringLower(replacement);
 	int term_length = strlen(term);
-	
-	while (token != NULL) {
-		char * lowerToken = stringLower(token);
+	if(term[0] != '\"' || term[0] != '-' || term[term_length - 1] != '*') {
+		while (token != NULL) {
+			char * lowerToken = stringLower(token);
 
-		int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
-		if((strcmp(token, term)) == 0) {
-			return 0;
-		}
-		if(strcmp_lower_result == 0) {
-			return 0;
-		}
-		token = strtok(NULL, space);
+			int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
+			if((strcmp(token, term)) == 0) {
+				return 0;
+			}
+			if(strcmp_lower_result == 0) {
+				return 0;
+			}
+			token = strtok(NULL, space);
 	}
-	return 1;
+		return 1;
+	}
+	else {
+		return 2;
+	}
+
+
 }
 /*
 	 a verse satisfies this condition iff there is a token in the
@@ -246,42 +253,82 @@ char* remove_first_char(char* str) {
 	new_str[len - 1] = '\0';
 	return new_str;
 }
+int check_line(char *str, char **terms, int num_terms) {
+	int count = 0;
+	for(int i = 0; i < num_terms; i++) {
+		if(checker_for_token(terms[i],str) == 0) {
+			count++;
+		}
+		else if(checker_for_token_dash(terms[i],str) == 0) {
+			count++;
+		}
+		else if(checker_for_token_star(terms[i],str) == 0) {
+			count++;
+		}
+	}
+	if(count == num_terms) {
+		return 0;
+	}
+	else {
+		return 1;
+	}
+	
+
+}
+
+
+
 int main (int argc, char ** argv)
 {
-	// char input[MAX_INPUT_LENGTH];
-    // char *tokens[MAX_NUM_INPUT];
+	fp_niv = fopen("NIV.txt", "r") ;
+	char * s = 0x0;
+	char input[MAX_INPUT_LENGTH];
+    char *tokens[MAX_NUM_INPUT];
 
-    // printf("Enter up to 8 tokens: ");
-    // fgets(input, 100, stdin);
+    printf("Enter up to 8 tokens: ");
+    fgets(input, 100, stdin);
 
-    // int num_tokens = tokenizer(input, tokens);
+    int num_tokens = tokenizer(input, tokens);
 
-    // if(num_tokens < 0) {
-    //     return 1;
-    // }
-
+    if(num_tokens < 0) {
+        return 1;
+    }
     // printf("Tokens: ");
     // for(int j = 0; j < num_tokens; j++) {
     //     printf("%s\n", tokens[j]);
     // }
-    // printf("\n");
+
+	for(int i = 0; i < num_tokens; i++) {
+    	tokens[i];
+		while ((s = read_a_line())) {
+			if((check_line(s, tokens, num_tokens)) == 0) {
+				printf("%s\n", s);
+				free(s);
+			}
+		}
+    }
 
 
-	//fp_niv = fopen("NIV.txt", "r") ;
 
-	char * jude = "-Jude" ;
-	char * s = "Jude 2:1 After Jesus was born in Bethlehem in juDe , during the time of King Herod, Magi from the east came to Jerusalem";
-	//char * new_s = remove_book_verse(s);
-	int x,y,z;
-	//x = checker_for_token_star(jude,s);
-	//printf("Checker for * %d\n", x);
+	fclose(fp_niv);
+	return 0;
+	
+	
+	
+	
+	
+	// char * jude = "Jude*" ;
+	// char * s = "Jude 2:1 After Jesus was born in Bethlehem in jude , during the time of King Herod, Magi from the east came to Jerusalem";
+	// char * new_s = remove_book_verse(s);
+	// int x,y,z;
+	// x = checker_for_token_star(jude,s);
+	// printf("Checker for * %d\n", x);
 	// y = checker_for_token(jude,s);
 	// printf("Checker for normal token %d\n", y);
-	z = checker_for_token_dash(jude,s);
-	printf("Checker for dash token(1 if it token is in line/ 0 if it is not):%d\n", z);
-	printf("%s\n", s);
-	//free(s);
-	//fclose(fp_niv) ;
+	// z = checker_for_token_dash(jude,s);
+	// printf("Checker for dash token(1 if it token is in line/ 0 if it is not):%d\n", z);
+	// printf("%s\n", s);
+	// free(s);
 
 	// char str[] = "-hello world";
     // printf("Original string: %s\n", str);
@@ -289,7 +336,7 @@ int main (int argc, char ** argv)
     // char *new_str = remove_first_char(str);
     // printf("Modified string: %s\n", new_str);
     
-    return 0;
+    
 }
 	
 
