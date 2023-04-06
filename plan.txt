@@ -25,3 +25,27 @@ read_input {
 
     if its chapter:num
 }
+
+int checker_for_quotes(char *term, char * string) {
+// 	const char quote[2] = "\"";
+// 	int term_length = strlen(term);
+// 	if((term[0] == quote) && (term[term_length-1]) == quote) {
+// 		char * new_string = remove_book_verse(string);
+// 		const char space[2] = " ";
+// 		char * token = strtok(new_string, space);
+// 		term = remove_first_char(term);
+// 		term = remove_last_char(term);
+// 		term_length = strlen(term);
+// 		while (token != NULL) {
+// 			if((strcmp(token, term)) == 0) {
+// 				return 0;
+// 			}
+// 			token = strtok(NULL, space);
+// 		}
+// 	} 
+
+// 	else {
+// 		return 2;
+// 	}
+
+// }

@@ -17,6 +17,7 @@ int tokenizer(char *input, char **terms);
 char* remove_last_char(const char* str);
 char* remove_first_char(char* str);
 int check_line(char *str, char **terms, int num_terms);
+int checker_for_quotes(char *term, char * string);
 char * read_a_line ()
 {
 	static char buf[BUFSIZ] ;
@@ -65,7 +66,7 @@ char * read_a_line ()
 
 
 int tokenizer(char *input, char **terms) {
-	// intitialzes variables
+	// initializes variables
     int i = 0;
     int quotes = 0;
 	//pointer to beginning of current token
@@ -194,7 +195,7 @@ int checker_for_token_dash (char * term, char * string) {
 	char * replacement = strdup(term);
 	char * lowerTerm = stringLower(replacement);
 	int term_length = strlen(term);
-	if(term[0] == '-') {
+	if(term[0] == '-') { //checks if the token is token dash
 		term = remove_first_char(term);
 		lowerTerm = remove_first_char(lowerTerm);
 		term_length = strlen(term);
@@ -235,7 +236,7 @@ char * remove_book_verse(char * str) {
     strcpy(new_str, str);
     return new_str;
 }
-
+// removes the last character and returns a string
 char* remove_last_char(const char* str) {
     int len = strlen(str);
     if (len == 0) {
@@ -246,7 +247,7 @@ char* remove_last_char(const char* str) {
     new_str[len - 1] = '\0';
     return new_str;
 }
-
+// removes the first character and returns a string
 char* remove_first_char(char* str) {
 	int len = strlen(str);
 
@@ -258,6 +259,7 @@ char* remove_first_char(char* str) {
 	new_str[len - 1] = '\0';
 	return new_str;
 }
+
 int check_line(char *str, char **terms, int num_terms) {
 	int count = 0;
 	for(int i = 0; i < num_terms; i++) {
@@ -281,8 +283,6 @@ int check_line(char *str, char **terms, int num_terms) {
 
 }
 
-
-
 int main (int argc, char ** argv)
 {
 	fp_niv = fopen("NIV.txt", "r") ;
@@ -290,7 +290,6 @@ int main (int argc, char ** argv)
 	char input[MAX_INPUT_LENGTH];
     char *tokens[MAX_NUM_INPUT];
 
-    printf("Enter up to 8 tokens: ");
     fgets(input, 100, stdin);
 
     int num_tokens = tokenizer(input, tokens);
@@ -298,13 +297,11 @@ int main (int argc, char ** argv)
     if(num_tokens < 0) {
         return 1;
     }
-    // printf("Tokens: ");
     // for(int j = 0; j < num_tokens; j++) {
     //     printf("%s\n", tokens[j]);
     // }
 
 	for(int i = 0; i < num_tokens; i++) {
-    	tokens[i];
 		while ((s = read_a_line())) {
 			if((check_line(s, tokens, num_tokens)) == 0) {
 				printf("%s\n", s);
@@ -334,10 +331,8 @@ int main (int argc, char ** argv)
 	// printf("Checker for dash token(1 if it token is in line/ 0 if it is not):%d\n", z);
 	// printf("%s\n", s);
 	// free(s);
-
 	// char str[] = "-hello world";
     // printf("Original string: %s\n", str);
-    
     // char *new_str = remove_first_char(str);
     // printf("Modified string: %s\n", new_str);
     
