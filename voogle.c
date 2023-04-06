@@ -71,7 +71,7 @@ int tokenizer(char *input, char **terms) {
     char *token_start = input; 	//pointer to beginning of current token
     strtok(input, "\n"); 	//removes new line character
 
-    while (*input != '\0') { 	//tokenizes when ever there is a space character
+    while (*input != '\0') { 	//continue to tokenize until there is a null character
 		// checks if current character is a quotation mark
         if (*input == '\"') {
             quotes = !quotes;
@@ -168,10 +168,8 @@ int checker_for_token_star (char * term, char * string) {
 	} 
 	else {
 		return 2; // if the term is not term* then return 2
-	}
-	
+	}	
 }
-
 /*
 	 a verse satisfies this condition iff the verse has 
 	 no token that matches with token in case-insensitive way
@@ -278,9 +276,7 @@ int main (int argc, char ** argv)
 	char input[MAX_INPUT_LENGTH];
     char *tokens[MAX_NUM_INPUT];
     fgets(input, 100, stdin);
-
     int num_tokens = tokenizer(input, tokens);
-
     if(num_tokens < 0) {
         return 1;
     }
