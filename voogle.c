@@ -243,8 +243,8 @@ char* remove_first_char(char* str) {
 	new_str[len - 1] = '\0';
 	return new_str;
 }
-
-int check_line(char *str, char **terms, int num_terms) { // check line return 0 if the each of the terms satisfy one of the checker function
+// check line return 0 if the each of the terms satisfy one of the checker function
+int check_line(char *str, char **terms, int num_terms) { 
 	int count = 0;
 	for(int i = 0; i < num_terms; i++) {
 		if(checker_for_token(terms[i],str) == 0) {
@@ -270,16 +270,18 @@ int main (int argc, char ** argv)
 {
 	fp_niv = fopen("NIV.txt", "r") ;
 	char * s = 0x0;
-	char input[MAX_INPUT_LENGTH];
-    char *tokens[MAX_NUM_INPUT];
+	char input[MAX_INPUT_LENGTH]; // create string for user input
+    char *tokens[MAX_NUM_INPUT]; // create string array for tokenized user input max length 8
     fgets(input, 100, stdin);
     int num_tokens = tokenizer(input, tokens);
-    if(num_tokens < 0) {
+    if(num_tokens < 0) { // if there is no input return 1
+		fprintf(stderr, "There is no input!");
         return 1;
+		
 	}
 	for(int i = 0; i < num_tokens; i++) {
-		while ((s = read_a_line())) {
-			if((check_line(s, tokens, num_tokens)) == 0) {
+		while ((s = read_a_line())) { // reads each line
+			if((check_line(s, tokens, num_tokens)) == 0) { //outputs a line if a check_line is satisfied
 				printf("%s\n", s);
 				free(s);
 			}
