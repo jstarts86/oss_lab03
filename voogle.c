@@ -108,7 +108,7 @@ char * stringLower(char * str) {
 int checker_for_token (char * term, char * string) {
 	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
-	char * token = strtok(new_string, space);
+	char * token = strtok(new_string, space); // tokenizes the new string without book and verse until white space character 
 	char * replacement = strdup(term);
 	char * lowerTerm = stringLower(replacement); //makes the term all lower case
 	int term_length = strlen(term); //gets the length of the term
@@ -140,8 +140,8 @@ int checker_for_token_star (char * term, char * string) {
 	
 	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
-	char * token = strtok(new_string, space);
-	char * replacement = strdup(term);
+	char * token = strtok(new_string, space); // tokenizes the new string without book and verse until white space character 
+	char * replacement = strdup(term); //duplicates the term
 	char * lowerTerm = stringLower(replacement);
 	int term_length = strlen(term);
 	if(term[term_length-1] == '*') {
@@ -177,8 +177,8 @@ int checker_for_token_star (char * term, char * string) {
 int checker_for_token_dash (char * term, char * string) {
 	char * new_string = remove_book_verse(string);
 	const char space[2] = " ";
-	char * token = strtok(new_string, space); // makes a take out of the first string before a white space character
-	char * replacement = strdup(term);
+	char * token = strtok(new_string, space); // tokenizes the new string without book and verse until white space character 
+	char * replacement = strdup(term); // string duplicates the term
 	char * lowerTerm = stringLower(replacement);
 	int term_length = strlen(term);
 	if(term[0] == '-') { //checks if the term is term-
@@ -209,9 +209,9 @@ int checker_for_token_dash (char * term, char * string) {
 char * remove_book_verse(char * str) {
     int space_count = 0;
     char *ptr = str;
-    while (*ptr != '\0') {
-        if (*ptr == ' ') {
-            space_count++;
+    while (*ptr != '\0') { //tokenize until end of string
+        if (*ptr == ' ') { // if token is a space
+            space_count++; // space ++
             if (space_count == 2) {
                 char *new_str = (char*)malloc(strlen(ptr));
                 strcpy(new_str, ptr+1);
@@ -238,10 +238,6 @@ char* remove_last_char(const char* str) {
 // removes the first character and returns a string
 char* remove_first_char(char* str) {
 	int len = strlen(str);
-
-	if(len == 0) {
-		return NULL;
-	}
 	char* new_str = (char*) malloc(len);
 	memmove(new_str, str +1, len); // moves the string one step to the left getting rid of the very first index
 	new_str[len - 1] = '\0';
@@ -260,6 +256,7 @@ int check_line(char *str, char **terms, int num_terms) { // check line return 0 
 		else if(checker_for_token_star(terms[i],str) == 0) {
 			count++;
 		}
+
 	}
 	if(count == num_terms) {
 		return 0;
@@ -279,7 +276,7 @@ int main (int argc, char ** argv)
     int num_tokens = tokenizer(input, tokens);
     if(num_tokens < 0) {
         return 1;
-    }
+	}
 	for(int i = 0; i < num_tokens; i++) {
 		while ((s = read_a_line())) {
 			if((check_line(s, tokens, num_tokens)) == 0) {
