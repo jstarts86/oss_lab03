@@ -118,13 +118,13 @@ int checker_for_token (char * term, char * string) {
 			char * lowerToken = stringLower(token);
 
 			int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
-			if((strcmp(token, term)) == 0) {
+			if((strcmp(token, term)) == 0) {  // if the token is the same to term up to term length then return true
 				return 0;
 			}
-			if(strcmp_lower_result == 0) {
+			if(strcmp_lower_result == 0) { // if the lower case token is exactly equal to the lowercase term then return true
 				return 0;
 			}
-			token = strtok(NULL, space);
+			token = strtok(NULL, space); //resumes tokeninzing until a white space character
 	}
 		return 1;
 	}
@@ -149,9 +149,9 @@ int checker_for_token_star (char * term, char * string) {
 		term_length = strlen(term);
 		while (token != NULL) {
 			int result1 = strncmp(token, term, term_length); // compares the token with the term up to the length of the term
-			char * lowerToken = stringLower(token);
-			int strcmp_lower_result = strcmp(lowerToken, lowerTerm); // compares the lower case token with the lower case term up to the length of the term
-			int resultLower = strncmp(lowerToken, lowerTerm, term_length);
+			char * lowerToken = stringLower(token); 
+			int strcmp_lower_result = strcmp(lowerToken, lowerTerm); // if the token is exactly equal to the term then return false
+			int resultLower = strncmp(lowerToken, lowerTerm, term_length); // compares the lower case token with the lower case term up to the length of the term
 			if((strcmp(token, term)) != 0)  { // if the token is exactly equal to the term then return false
 				if(result1 == 0) { // if the token is the same to term up to term length then return true
 					return 0;
