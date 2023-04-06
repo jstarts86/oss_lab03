@@ -49,3 +49,48 @@ int checker_for_quotes(char *term, char * string) {
 // 	}
 
 // }
+
+	// char * jude = "Jude*" ;
+	// char * s = "Jude 2:1 After Jesus was born in Bethlehem in jude , during the time of King Herod, Magi from the east came to Jerusalem";
+	// char * new_s = remove_book_verse(s);
+	// int x,y,z;
+	// x = checker_for_token_star(jude,s);
+	// printf("Checker for * %d\n", x);
+	// y = checker_for_token(jude,s);
+	// printf("Checker for normal token %d\n", y);
+	// z = checker_for_token_dash(jude,s);
+	// printf("Checker for dash token(1 if it token is in line/ 0 if it is not):%d\n", z);
+	// printf("%s\n", s);
+	// free(s);
+	// char str[] = "-hello world";
+    // printf("Original string: %s\n", str);
+    // char *new_str = remove_first_char(str);
+    // printf("Modified string: %s\n", new_str);
+    
+    int checker_for_book (char * term, char * string) {
+	char * new_string = remove_book_verse(string);
+	const char space[2] = " ";
+	char * token = strtok(new_string, space);
+	char * replacement = strdup(term); 
+	char * lowerTerm = stringLower(replacement);
+	int term_length = strlen(term);
+	if(term[0] == '-') { //checks if the token is token dash
+		term = remove_first_char(term);
+		lowerTerm = remove_first_char(lowerTerm);
+		term_length = strlen(term);
+		while (token != NULL) {
+			char * lowerToken = stringLower(token);
+			int strcmp_lower_result = strcmp(lowerToken, lowerTerm);
+			if((strcmp(token, term)) == 0) {
+				return 1;
+			}
+			if(strcmp_lower_result == 0) {
+				return 1;
+			}
+			token = strtok(NULL, space);
+		}
+		return 0;
+	} else {
+		return 2;
+	}
+}
